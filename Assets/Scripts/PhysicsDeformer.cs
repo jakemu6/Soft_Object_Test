@@ -4,19 +4,11 @@ using UnityEngine;
 
 public class PhysicsDeformer : MonoBehaviour
 {
+
+    //Radius of which the collision appears
     public float collisionRadius = 0.1f;
     public DeformableMesh deformableMesh;
     // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     void OnCollisionStay(Collision collision)
     {

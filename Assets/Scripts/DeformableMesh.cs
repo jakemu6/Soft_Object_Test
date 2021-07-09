@@ -28,6 +28,9 @@ public class DeformableMesh : MonoBehaviour
 
     }
 
+
+    //This is called in the physics deformer which detects collision from the Collider
+    //It then references this add depression which refreshes the values in the mesh.
     public void AddDepression(Vector3 depressionPoint, float radius)
     {
       //translate the depression relative to the worldspace
@@ -35,13 +38,18 @@ public class DeformableMesh : MonoBehaviour
       var worldPos4 = this.transform.worldToLocalMatrix * depressionPoint;
       var worldPos = new Vector3(worldPos4.x, worldPos4.y, worldPos4.z);
 
-      //
+
       for (int i = 0; i < modifiedVertices.Count; ++i)
       {
-        var distance = (worldPos - (modifiedVertices[i] + Vector3.down * maximumDepression)).magnitude;
+        //distance is detecting which pixels in the x and z that need to be impacted
+        var distance = (worldPos - (modifiedVertices[i] + new Vector3(0.0f, -1.0f, 0.0f))).magnitude;
+
+        //Detecting the impact radius in which the vertices of the mesh in that radius will be remade.
         if (distance < radius)
         {
-          var newVert = originalVertices[i] + Vector3.down * maximumDepression;
+          //newVert is by how much do these vertices change
+          var newVert = modifiedVertices[i] - new Vector3(0.0f, -1.0f, 0.0f) * maximumDepression;
+          //remove the old and bring in the newVert coord
           modifiedVertices.RemoveAt(i);
           modifiedVertices.Insert(i, newVert);
         }
@@ -51,7 +59,7 @@ public class DeformableMesh : MonoBehaviour
       }
 
       plane.mesh.SetVertices(modifiedVertices);
-      Debug.Log("Mesh Depressed");
+      // Debug.Log("Mesh Depressed");
 
     }
 
